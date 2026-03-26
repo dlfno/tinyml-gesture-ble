@@ -29,7 +29,7 @@ Este proyecto implementa un **pipeline TinyML de extremo a extremo** para clasif
 ┌──────────────────────┐   BLE GATT   ┌─────────────────┐  WebSocket  ┌─────────────────────┐
 │  Arduino Nano 33 BLE │  ──────────► │  Puente Python  │ ──────────► │   Dashboard Web     │
 │  ─────────────────── │              │  ble_bridge.py  │             │   dashboard/        │
-│  BMI270 IMU (100 Hz) │              │  localhost:8765  │             │   UI en tiempo real │
+│  BMI270 IMU (100 Hz) │              │  localhost:8765 │             │   UI en tiempo real │
 │  CNN 1D (26.9 KB)    │              └─────────────────┘             └─────────────────────┘
 │  INT8 TFLite Micro   │
 └──────────────────────┘
