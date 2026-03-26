@@ -1,0 +1,517 @@
+<!DOCTYPE html><html class="light" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>TinyML - Engineering Control v4.2.0</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed": "#e4e2e2",
+                        "surface-container": "#edeeef",
+                        "on-error": "#ffffff",
+                        "primary": "#0050cb",
+                        "on-tertiary-container": "#faf8f8",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#dae1ff",
+                        "inverse-on-surface": "#f0f1f2",
+                        "secondary-container": "#2970e2",
+                        "on-secondary-fixed": "#001a43",
+                        "on-tertiary-fixed": "#1b1c1c",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#424656",
+                        "secondary": "#0057c0",
+                        "on-tertiary-fixed-variant": "#464747",
+                        "on-surface": "#191c1d",
+                        "surface-bright": "#f8f9fa",
+                        "on-primary": "#ffffff",
+                        "inverse-surface": "#2e3132",
+                        "surface-variant": "#e1e3e4",
+                        "on-background": "#191c1d",
+                        "tertiary-container": "#727272",
+                        "on-secondary-container": "#fefcff",
+                        "outline": "#727687",
+                        "surface": "#f8f9fa",
+                        "on-secondary-fixed-variant": "#004397",
+                        "surface-container-highest": "#e1e3e4",
+                        "inverse-primary": "#b3c5ff",
+                        "outline-variant": "#c2c6d8",
+                        "surface-dim": "#d9dadb",
+                        "on-primary-fixed": "#001849",
+                        "on-primary-fixed-variant": "#003fa4",
+                        "on-primary-container": "#f8f7ff",
+                        "primary-container": "#0066ff",
+                        "on-tertiary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed-dim": "#c7c6c6",
+                        "surface-container-low": "#f3f4f5",
+                        "tertiary": "#595a5a",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#aec6ff",
+                        "surface-tint": "#0054d6",
+                        "background": "#f8f9fa",
+                        "primary-fixed-dim": "#b3c5ff",
+                        "secondary-fixed": "#d8e2ff",
+                        "surface-container-high": "#e7e8e9"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Space Grotesk"],
+                        "mono": ["JetBrains Mono", "ui-monospace"]
+                    },
+                    borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .blueprint-grid {
+            background-image:
+                linear-gradient(to right, #0050cb11 1px, transparent 1px),
+                linear-gradient(to bottom, #0050cb11 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .blueprint-subgrid {
+            background-image:
+                linear-gradient(to right, #0050cb05 1px, transparent 1px),
+                linear-gradient(to bottom, #0050cb05 1px, transparent 1px);
+            background-size: 8px 8px;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary selection:text-white blueprint-grid min-h-screen">
+<div class="blueprint-subgrid min-h-screen">
+<!-- Centered Dashboard Container -->
+<div class="max-w-7xl mx-auto px-6 py-12 space-y-12">
+<!-- Prominent Header -->
+<header class="flex flex-col items-center text-center space-y-4">
+<h1 class="text-7xl font-black tracking-tighter text-[#0050cb] dark:text-blue-400 font-mono" style="">TinyML</h1>
+<div class="flex items-center gap-4">
+<span class="font-mono text-[10px] text-slate-500 tracking-[0.3em] uppercase" style="">Multiclass_Movement_Detector V0.1.0-STABLE</span>
+<div class="h-[1px] w-12 bg-primary/30"></div>
+<div class="flex items-center gap-2">
+<span id="status-dot" class="w-2 h-2 rounded-full bg-red-500"></span>
+<span id="status-label" class="font-mono text-[10px] text-red-500" style="">SYSTEM_OFFLINE</span>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="space-y-12">
+<!-- Top Section: 3-Column Balanced Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+<!-- Left: Inference Latency & Sensor Status -->
+<div class="lg:col-span-3 space-y-6">
+<div class="bg-white p-6 border-l-4 border-primary shadow-sm ring-1 ring-black/5">
+<p class="font-mono text-[10px] text-outline uppercase tracking-widest mb-1" style="">Inference Latency</p>
+<div class="flex items-baseline gap-2">
+<span id="latency-value" class="text-5xl font-headline font-black text-primary" style="">14.2</span>
+<span class="font-mono text-xs text-on-surface-variant font-bold" style="">MS</span>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex items-center gap-3 p-4 bg-white border border-outline-variant/10 shadow-sm">
+<span class="material-symbols-outlined text-primary text-sm" style="">sensors</span>
+<div>
+<p class="font-mono text-[10px] font-bold" style="">IMU_SENSOR_01</p>
+<p id="imu-status" class="font-mono text-[9px] text-green-600" style="">ACTIVE_STREAM</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-4 bg-white border border-outline-variant/10 shadow-sm">
+<span class="material-symbols-outlined text-primary text-sm" style="">bluetooth</span>
+<div>
+<p class="font-mono text-[10px] font-bold" style="">BT_TRANSMITTER</p>
+<p id="bt-status" class="font-mono text-[9px] text-red-500" style="">DISCONNECTED</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Center: Primary Visualization -->
+<div class="lg:col-span-6 flex flex-col items-center justify-center py-4">
+<div class="relative w-80 h-80 flex items-center justify-center">
+<!-- Background Circles -->
+<div class="absolute inset-0 border border-primary/10 rounded-full"></div>
+<div class="absolute inset-4 border border-primary/5 rounded-full"></div>
+<div class="absolute inset-10 border-2 border-primary/5 rounded-full"></div>
+<!-- Animated-style gauge -->
+<svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+<circle class="text-surface-container-high" cx="50" cy="50" fill="none" r="48" stroke="currentColor" stroke-width="0.5"></circle>
+<circle id="gauge-arc" class="text-primary" cx="50" cy="50" fill="none" r="48" stroke="currentColor" stroke-dasharray="210 301" stroke-width="2.5" style="transition: stroke-dasharray 0.3s ease;"></circle>
+</svg>
+<div class="text-center z-10">
+<p class="font-mono text-[10px] tracking-[0.2em] text-outline uppercase mb-2" style="">Estado Actual</p>
+<h2 id="current-class" class="text-7xl font-headline font-black tracking-tighter text-on-surface leading-none" style="">CÍRCULO</h2>
+<div class="mt-6 inline-flex items-center gap-2 px-4 py-1.5 bg-primary text-white font-mono text-xs">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: &quot;FILL&quot; 1;">check_circle</span>
+<span id="confidence-value" class="" style="">CONFIDENCIA 92%</span>
+</div>
+</div>
+<!-- Technical Crosshair Ticks -->
+<!-- Top (North) -->
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1px] h-4 bg-primary"></div>
+<!-- Bottom (South) -->
+<div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1px] h-4 bg-outline-variant/60"></div>
+<!-- Left (270) -->
+<div class="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-[1px] bg-outline-variant/60"></div>
+<!-- Right (90) -->
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-[1px] bg-outline-variant/60"></div>
+</div>
+</div>
+<!-- Right: Probability Matrix (Cleaned) -->
+<div class="lg:col-span-3 space-y-6">
+<div class="border-b border-primary/20 pb-2 flex justify-between items-end">
+<h3 class="font-mono text-xs font-bold text-on-surface uppercase tracking-tighter" style="">Probability_Matrix</h3>
+<span class="font-mono text-[9px] text-outline" style="">SIG_PROC_v4</span>
+</div>
+<div class="space-y-5">
+<!-- Class 0: CÍRCULO -->
+<div class="group">
+<div class="flex justify-between font-mono text-[10px] mb-1.5">
+<span id="prob-label-0" class="text-primary font-bold">CÍRCULO</span>
+<span id="prob-value-0" class="text-on-surface font-bold">92.0%</span>
+</div>
+<div class="h-5 bg-surface-container-high relative overflow-hidden ring-1 ring-black/5">
+<div id="prob-bar-0" class="h-full bg-primary transition-all duration-300" style="width:92%"></div>
+</div>
+</div>
+<!-- Class 1: DEFAULT -->
+<div class="group">
+<div class="flex justify-between font-mono text-[10px] mb-1.5">
+<span id="prob-label-1" class="text-on-surface-variant font-medium">DEFAULT</span>
+<span id="prob-value-1" class="text-on-surface-variant">3.0%</span>
+</div>
+<div class="h-5 bg-surface-container-high relative overflow-hidden ring-1 ring-black/5">
+<div id="prob-bar-1" class="h-full bg-secondary transition-all duration-300" style="width:3%"></div>
+</div>
+</div>
+<!-- Class 2: LADO -->
+<div class="group">
+<div class="flex justify-between font-mono text-[10px] mb-1.5">
+<span id="prob-label-2" class="text-on-surface-variant font-medium">LADO</span>
+<span id="prob-value-2" class="text-on-surface-variant">2.8%</span>
+</div>
+<div class="h-5 bg-surface-container-high relative overflow-hidden ring-1 ring-black/5">
+<div id="prob-bar-2" class="h-full bg-secondary transition-all duration-300" style="width:2.8%"></div>
+</div>
+</div>
+<!-- Class 3: QUIETO -->
+<div class="group">
+<div class="flex justify-between font-mono text-[10px] mb-1.5">
+<span id="prob-label-3" class="text-on-surface-variant font-medium">QUIETO</span>
+<span id="prob-value-3" class="text-on-surface-variant">2.2%</span>
+</div>
+<div class="h-5 bg-surface-container-high relative overflow-hidden ring-1 ring-black/5">
+<div id="prob-bar-3" class="h-full bg-secondary transition-all duration-300" style="width:2.2%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Section: Full Width Datafeed Terminal -->
+<div class="w-full bg-white border border-outline-variant/30 shadow-lg flex flex-col h-64 overflow-hidden">
+<div class="bg-surface-container-highest px-6 py-2.5 flex justify-between items-center shrink-0 border-b border-outline-variant/20">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-mono text-[11px] font-bold text-on-surface tracking-wider" style="">LIVE_DATAFEED_TERMINAL_STREAM</span>
+</div>
+<div class="flex items-center gap-6 font-mono text-[10px]">
+<span class="flex items-center gap-1.5" style=""><span class="text-primary" style="">●</span> UPLINK_STABLE</span>
+<span class="text-outline" style="">PACKETS_RCV: <span id="packets-count">0</span></span>
+</div>
+</div>
+<div id="terminal-content" class="p-6 font-mono text-[12px] text-on-surface-variant space-y-2 overflow-y-auto flex-1 bg-slate-50">
+<p class="flex items-center gap-4" style=""><span class="text-primary/60 font-bold shrink-0" style="">[14:22:01.042]</span> <span class="text-primary font-bold" style="">INFERENCE_COMPLETE</span> <span class="text-outline" style="">::</span> CLASS_01(CÍRCULO) <span class="text-outline" style="">::</span> CONFID_0.92</p>
+<p class="flex items-center gap-4" style=""><span class="text-primary/60 font-bold shrink-0" style="">[14:22:02.115]</span> <span class="text-on-surface font-bold" style="">BUFFER_FLUSH</span> <span class="text-outline" style="">::</span> 512_PACKETS_PROCESSED</p>
+<p class="flex items-center gap-4" style=""><span class="text-primary/60 font-bold shrink-0" style="">[14:22:04.567]</span> <span class="text-on-surface font-bold" style="">LATENCY_CHECK</span> <span class="text-outline" style="">::</span> 14.2MS <span class="text-outline" style="">::</span> WITHIN_THRESHOLD</p>
+<p class="flex items-center gap-4" style=""><span class="text-primary/60 font-bold shrink-0" style="">[14:22:05.221]</span> <span class="text-on-surface font-bold" style="">BIOMETRIC_SYNC</span> <span class="text-outline" style="">::</span> HEART_RATE: 72BPM <span class="text-outline" style="">::</span> STABLE</p>
+<p class="flex items-center gap-4" style=""><span class="text-primary/60 font-bold shrink-0" style="">[14:22:06.884]</span> <span class="text-on-surface font-bold" style="">SIGNAL_RECOVERY</span> <span class="text-outline" style="">::</span> COMPLETED_CRC_OK</p>
+<p class="flex items-center gap-4" style=""><span class="text-primary/60 font-bold shrink-0" style="">[14:22:07.412]</span> <span class="text-on-surface font-bold" style="">PACKET_LOSS</span> <span class="text-outline" style="">::</span> 0.00%_TOTAL</p>
+<p class="flex items-center gap-4" style=""><span class="text-primary/60 font-bold shrink-0" style="">[14:22:08.109]</span> <span class="text-primary font-bold" style="">INFERENCE_COMPLETE</span> <span class="text-outline" style="">::</span> CLASS_01(CÍRCULO) <span class="text-outline" style="">::</span> CONFID_0.91</p>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="pt-8 border-t border-primary/10 flex justify-between items-center font-mono text-[9px] text-outline uppercase tracking-[0.2em]">
+<span class="" style="">© 2026 APRENDIZAJE_MACHÍN</span>
+<div class="flex gap-4">
+<span class="" style="">t</span>
+<span class="" style="">SECURED_UPLINK</span>
+</div>
+</footer>
+</div>
+</div>
+
+<script>
+// === CONFIGURACIÓN ===
+const WS_URL            = 'ws://localhost:8765';
+const MAX_TERMINAL_LINES = 50;
+const STALE_TIMEOUT_MS  = 3000;
+const EMA_ALPHA         = 0.3;
+
+// === ESTADO ===
+let ws              = null;
+let lastMessageTime = 0;
+let reconnectTimer  = null;
+let staleCheckTimer = null;
+let packetCount     = 0;
+let smoothedProbs   = null;
+
+// === CLASES DEL MODELO ===
+// 4 clases reales — orden alfabético del LabelEncoder
+const CLASS_NAMES = ['CÍRCULO', 'DEFAULT', 'LADO', 'QUIETO'];
+
+// === GAUGE CONFIG ===
+const GAUGE_R         = 48;
+const GAUGE_CIRCUM    = 2 * Math.PI * GAUGE_R; // ~301.6
+
+// ---------------------------------------------------------------------------
+// WebSocket
+// ---------------------------------------------------------------------------
+function connectWebSocket() {
+    clearTimeout(reconnectTimer);
+
+    ws = new WebSocket(WS_URL);
+
+    ws.onopen = () => {
+        updateConnectionStatus('connected');
+        smoothedProbs = null;  // Reset EMA al reconectar
+        console.log('[WS] Conectado a', WS_URL);
+    };
+
+    ws.onmessage = (event) => {
+        try {
+            const data = JSON.parse(event.data);
+            lastMessageTime = Date.now();
+            handleMessage(data);
+        } catch (e) {
+            console.error('[WS] JSON parse error:', e);
+        }
+    };
+
+    ws.onclose = () => {
+        updateConnectionStatus('disconnected');
+        reconnectTimer = setTimeout(connectWebSocket, 2000);
+    };
+
+    ws.onerror = () => {
+        // onclose will fire after onerror — no extra action needed
+        ws.close();
+    };
+}
+
+// ---------------------------------------------------------------------------
+// Message dispatcher
+// ---------------------------------------------------------------------------
+function handleMessage(data) {
+    switch (data.status) {
+        case 'inference':
+            updateDashboard(data);
+            appendTerminalLine(data);
+            packetCount++;
+            document.getElementById('packets-count').textContent =
+                packetCount.toLocaleString('es-MX');
+            break;
+        case 'connected':
+            updateBLEStatus(true);
+            break;
+        case 'disconnected':
+            updateBLEStatus(false);
+            break;
+        case 'scanning':
+            updateBLEStatus(false, 'SCANNING');
+            break;
+        case 'error':
+            updateBLEStatus(false, 'ERROR');
+            break;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// EMA smoothing
+// ---------------------------------------------------------------------------
+function smoothProbabilities(rawProbs) {
+    if (!smoothedProbs) {
+        smoothedProbs = [...rawProbs];
+        return smoothedProbs;
+    }
+    for (let i = 0; i < rawProbs.length; i++) {
+        smoothedProbs[i] = EMA_ALPHA * rawProbs[i] + (1 - EMA_ALPHA) * smoothedProbs[i];
+    }
+    return smoothedProbs;
+}
+
+// ---------------------------------------------------------------------------
+// Dashboard updaters
+// ---------------------------------------------------------------------------
+function updateDashboard(data) {
+    const rawProbs = data.probabilities || [0, 0, 0, 0];
+    const smooth   = smoothProbabilities(rawProbs);
+
+    // Clase predicha basada en probabilidades suavizadas
+    const bestIdx    = smooth.indexOf(Math.max(...smooth));
+    const confidence = smooth[bestIdx];
+    const className  = CLASS_NAMES[bestIdx] || data.class || 'UNKNOWN';
+
+    // 1. Clase predicha
+    const classEl = document.getElementById('current-class');
+    classEl.textContent = className;
+    classEl.className   = 'text-7xl font-headline font-black tracking-tighter text-on-surface leading-none';
+
+    // 2. Confianza (suavizada)
+    document.getElementById('confidence-value').textContent =
+        `CONFIDENCIA ${confidence.toFixed(0)}%`;
+
+    // 3. Gauge arc (stroke-dasharray) — suavizado
+    const filled = (confidence / 100) * GAUGE_CIRCUM;
+    document.getElementById('gauge-arc').setAttribute(
+        'stroke-dasharray', `${filled.toFixed(2)} ${GAUGE_CIRCUM.toFixed(2)}`
+    );
+
+    // 4. Latencia — siempre cruda (valor instantáneo)
+    document.getElementById('latency-value').textContent =
+        (data.latency_ms || 0).toFixed(1);
+
+    // 5. Barras de probabilidad — suavizadas
+    updateProbabilityBars(smooth);
+
+    // 6. IMU status activo
+    const imuEl = document.getElementById('imu-status');
+    if (imuEl) {
+        imuEl.textContent = 'ACTIVE_STREAM';
+        imuEl.className   = 'font-mono text-[9px] text-green-600';
+    }
+}
+
+function updateProbabilityBars(probs) {
+    const maxVal = Math.max(...probs);
+
+    probs.forEach((prob, idx) => {
+        const bar   = document.getElementById(`prob-bar-${idx}`);
+        const label = document.getElementById(`prob-label-${idx}`);
+        const value = document.getElementById(`prob-value-${idx}`);
+
+        if (bar)   bar.style.width = `${Math.max(prob, 0.1).toFixed(2)}%`;
+        if (value) value.textContent = `${prob.toFixed(1)}%`;
+
+        const isActive = prob === maxVal && prob > 0;
+        if (label) {
+            if (isActive) {
+                label.className = 'text-primary font-bold';
+                if (bar) { bar.className = 'h-full bg-primary transition-all duration-300'; }
+                if (value) { value.className = 'text-on-surface font-bold'; }
+            } else {
+                label.className = 'text-on-surface-variant font-medium';
+                if (bar) { bar.className = 'h-full bg-secondary transition-all duration-300'; }
+                if (value) { value.className = 'text-on-surface-variant'; }
+            }
+        }
+    });
+}
+
+// ---------------------------------------------------------------------------
+// Terminal
+// ---------------------------------------------------------------------------
+function appendTerminalLine(data) {
+    const terminal = document.getElementById('terminal-content');
+    const bridgeTime = data.bridge_time ? new Date(data.bridge_time) : new Date();
+
+    const hh   = String(bridgeTime.getHours()).padStart(2, '0');
+    const mm   = String(bridgeTime.getMinutes()).padStart(2, '0');
+    const ss   = String(bridgeTime.getSeconds()).padStart(2, '0');
+    const ms   = String(bridgeTime.getMilliseconds()).padStart(3, '0');
+    const time = `${hh}:${mm}:${ss}.${ms}`;
+
+    const probs      = data.probabilities || [0, 0, 0, 0];
+    const confidence = Math.max(...probs).toFixed(2);
+
+    const line = document.createElement('p');
+    line.className = 'flex items-center gap-4';
+    line.innerHTML =
+        `<span class="text-primary/60 font-bold shrink-0">[${time}]</span>` +
+        `<span class="text-primary font-bold">INFERENCE_COMPLETE</span>` +
+        `<span class="text-outline">::</span>` +
+        `CLASS(${data.class})` +
+        `<span class="text-outline">::</span>` +
+        `CONFID_${confidence}`;
+
+    terminal.appendChild(line);
+
+    // Limit to MAX_TERMINAL_LINES
+    while (terminal.children.length > MAX_TERMINAL_LINES) {
+        terminal.removeChild(terminal.firstChild);
+    }
+
+    // Auto-scroll
+    terminal.scrollTop = terminal.scrollHeight;
+}
+
+// ---------------------------------------------------------------------------
+// Status indicators
+// ---------------------------------------------------------------------------
+function updateConnectionStatus(status) {
+    const dot   = document.getElementById('status-dot');
+    const label = document.getElementById('status-label');
+    if (!dot || !label) return;
+
+    switch (status) {
+        case 'connected':
+            dot.className   = 'w-2 h-2 rounded-full bg-primary animate-pulse';
+            label.textContent = 'SYSTEM_ACTIVE';
+            label.className = 'font-mono text-[10px] text-primary';
+            break;
+        case 'stale':
+            dot.className   = 'w-2 h-2 rounded-full bg-yellow-500 animate-pulse';
+            label.textContent = 'SYSTEM_IDLE';
+            label.className = 'font-mono text-[10px] text-yellow-600';
+            break;
+        case 'disconnected':
+        default:
+            dot.className   = 'w-2 h-2 rounded-full bg-red-500';
+            label.textContent = 'SYSTEM_OFFLINE';
+            label.className = 'font-mono text-[10px] text-red-500';
+            break;
+    }
+}
+
+function updateBLEStatus(connected, customLabel) {
+    const btStatus = document.getElementById('bt-status');
+    if (!btStatus) return;
+    btStatus.textContent = customLabel || (connected ? 'CONNECTED' : 'DISCONNECTED');
+    btStatus.className   = `font-mono text-[9px] ${connected ? 'text-green-600' : 'text-red-500'}`;
+}
+
+// ---------------------------------------------------------------------------
+// Stale check — marks SYSTEM_IDLE if no messages for > 3s after first message
+// ---------------------------------------------------------------------------
+function startStaleCheck() {
+    staleCheckTimer = setInterval(() => {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            if (lastMessageTime > 0 && Date.now() - lastMessageTime > STALE_TIMEOUT_MS) {
+                updateConnectionStatus('stale');
+                const imuEl = document.getElementById('imu-status');
+                if (imuEl) {
+                    imuEl.textContent = 'IDLE';
+                    imuEl.className   = 'font-mono text-[9px] text-yellow-600';
+                }
+            }
+        }
+    }, 1000);
+}
+
+// ---------------------------------------------------------------------------
+// Boot
+// ---------------------------------------------------------------------------
+document.addEventListener('DOMContentLoaded', () => {
+    connectWebSocket();
+    startStaleCheck();
+});
+</script>
+</body></html>

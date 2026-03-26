@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this project in your research or work, please cite it as below."
+type: software
+title: "TinyML Gesture Classification"
+abstract: >
+  End-to-end TinyML pipeline for real-time gesture recognition on Arduino Nano 33 BLE Sense Rev2.
+  Implements a 1D CNN (97.6% accuracy, 26.9 KB INT8 quantized) alongside five classical ML baselines
+  (Random Forest, Logistic Regression, Naive Bayes, Linear SVM, RBF SVM), a Python BLE-to-WebSocket
+  bridge, and a live web dashboard.
+authors:
+  - family-names: Cervantes Flores
+    given-names: Alonso
+license: MIT
+repository-code: "https://github.com/alonsocervantesflores/tinyml-gesture-ble"
+keywords:
+  - tinyml
+  - edge-ai
+  - gesture-recognition
+  - arduino
+  - tensorflow-lite
+  - bluetooth-le
+  - imu
+  - embedded-ml
+  - 1d-cnn
+  - microcontroller

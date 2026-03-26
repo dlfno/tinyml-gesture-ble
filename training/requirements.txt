@@ -1,0 +1,8 @@
+numpy>=1.26
+pandas>=2.2
+matplotlib>=3.9
+scipy>=1.13
+tensorflow>=2.21
+scikit-learn>=1.5
+scienceplots>=2.0  # opcional — estilos de publicación para los plots EDA
+micromlgen>=1.1    # exporta modelos sklearn a C++ para Arduino

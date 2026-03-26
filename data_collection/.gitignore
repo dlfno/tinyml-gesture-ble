@@ -1,0 +1,16 @@
+# Entornos virtuales
+uwu/
+venv/
+env/
+.env
+
+# Cachés de Python
+__pycache__/
+*.pyc
+.mypy_cache/
+
+# Archivos del sistema
+.DS_Store
+
+# Carpetas de configuración locales
+.claude/

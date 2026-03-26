@@ -1,0 +1,23 @@
+# Environments
+venv/
+uwu/
+.venv/
+env/
+.env
+
+# Cache and temporary files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.mypy_cache/
+.pytest_cache/
+.DS_Store
+
+# IDEs
+.vscode/
+.idea/
+
+# Jupyter Notebook
+.ipynb_checkpoints
