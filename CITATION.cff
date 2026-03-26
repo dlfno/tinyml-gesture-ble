@@ -9,9 +9,15 @@ abstract: >
   bridge, and a live web dashboard.
 authors:
   - family-names: Cervantes Flores
-    given-names: Alonso
+    given-names: Alonso Delfino
+  - family-names: Ramirez Cristobal
+    given-names: Nadia Paulina
+  - family-names: Villalba Gonzalez
+    given-names: Diego Antonio
+  - family-names: Serrato Soteno
+    given-names: Hugo Yustan
 license: MIT
-repository-code: "https://github.com/alonsocervantesflores/tinyml-gesture-ble"
+repository-code: "https://github.com/dlfno/tinyml-gesture-ble"
 keywords:
   - tinyml
   - edge-ai
