@@ -41,7 +41,7 @@ This project implements a **complete end-to-end TinyML pipeline** for classifyin
 
 | Class | Description |
 |---|---|
-| `CIRCULO` | Circular wrist motion |
+| `CIRCULO` | Circular motion |
 | `LADO` | Lateral side-to-side motion |
 | `QUIETO` | Device at rest |
 | `DEFAULT` | Any other movement |

@@ -39,7 +39,7 @@ Este proyecto implementa un **pipeline TinyML de extremo a extremo** para clasif
 
 | Clase | Descripción |
 |---|---|
-| `CIRCULO` | Movimiento circular de muñeca |
+| `CIRCULO` | Movimiento circular |
 | `LADO` | Movimiento lateral de lado a lado |
 | `QUIETO` | Dispositivo en reposo |
 | `DEFAULT` | Cualquier otro movimiento |
